@@ -1,0 +1,48 @@
+# MPD
+
+```SQL
+BEGIN
+DROP TABLE IF EXISTS post_category, comment, post, category, appUser;
+
+CREATE TABLE IF NOT EXISTS appUser (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(128) NOT NULL,
+    last_name VARCHAR(128) NOT NULL,
+    pseudo VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(128) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS post (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    appUser_id INT NOT NULL,
+    FOREIGN KEY (appUser_id) REFERENCES appUser(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS comment (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    content TEXT NOT NULL,
+    post_id INT NOT NULL,
+    appUser_id INT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (appUser_id) REFERENCES appUser(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS category (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS post_category (
+    post_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (post_id, category_id),
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
+);
+
+COMMIT
+```
