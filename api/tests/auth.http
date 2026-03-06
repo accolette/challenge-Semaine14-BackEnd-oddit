@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:{{$dotenv PORT}}
+
+
+###
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "pseudo": "Jj",
+    "email": "jjdoe@gmail.com",
+    "password":"@Jjdoe123"
+}

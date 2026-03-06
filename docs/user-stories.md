@@ -90,6 +90,13 @@ Développer l'API REST backend pour gérer les utilisateurs, catégories, posts 
 **Afin de** créer une conversation structurée.
 
 ---
+## 5️⃣ Bonus
+
+### US14 - Création de rôle administateur / user / moderateurs
+### US15 - Création du FrontEnd
+
+
+---
 
 ## Contraintes techniques
 

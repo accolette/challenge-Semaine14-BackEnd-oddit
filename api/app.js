@@ -1,12 +1,27 @@
 import express from "express";
 import "dotenv/config";
+import cors from "cors";
+import { xss } from "express-xss-sanitizer";
+
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("coucou");
+// Allows the client to contact the API
+app.use(cors());
+// Protects against XSS injections
+app.use(xss());
+// Parses JSON request bodies: required to read req.body in POST / PATCH / PUT requests
+app.use(express.json());
+
+app.use("/auth", authRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
 });
+
+// TODO : app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log(`Serveur is running at http://localhost:${PORT}/`);
