@@ -1,7 +1,6 @@
 @baseUrl = http://localhost:{{$dotenv PORT}}
 
-
-###
+### Resitration for a new User
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -9,6 +8,24 @@ Content-Type: application/json
     "first_name": "Jane",
     "last_name": "Doe",
     "pseudo": "Jj",
+    "email": "jjdoe@gmail.com",
+    "password":"@Jjdoe123"
+}
+
+### Loggin for a User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "jjdoe@gmail.com",
+    "password":"@Jjdoe123"
+}
+
+### GET info about me
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+
+{
     "email": "jjdoe@gmail.com",
     "password":"@Jjdoe123"
 }

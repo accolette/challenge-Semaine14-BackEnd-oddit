@@ -21,3 +21,18 @@ export function validateUserRegistration(req, res, next) {
   });
   checkBody(validateSchema, req.body, res, next);
 }
+
+export function validateUserLogin(req, res, next) {
+  const validateSchema = Joi.object({
+    email: Joi.string().email().max(128).required(),
+    password: Joi.string()
+      .min(8)
+      .minOfSpecialCharacters(1)
+      .minOfUppercase(1)
+      .minOfLowercase(1)
+      .minOfNumeric(1)
+      .noWhiteSpaces()
+      .required(),
+  });
+  checkBody(validateSchema, req.body, res, next);
+}
