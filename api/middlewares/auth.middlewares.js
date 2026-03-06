@@ -1,6 +1,9 @@
+import "dotenv/config";
 import JoiBase from "joi";
+import jwt from "jsonwebtoken";
 import { joiPasswordExtendCore } from "joi-password";
 import { checkBody } from "./commons.middlewares.js";
+import { AppUser } from "../models/AppUser.js";
 
 const Joi = JoiBase.extend(joiPasswordExtendCore);
 
@@ -35,4 +38,28 @@ export function validateUserLogin(req, res, next) {
       .required(),
   });
   checkBody(validateSchema, req.body, res, next);
+}
+
+export async function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ error: "Authorization token missing or invalid" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+
+    if (!(await AppUser.findByPk(req.user.user_id))) {
+      return res.status(401).json({ error: "Invalid user" });
+    }
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
 }

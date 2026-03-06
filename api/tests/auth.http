@@ -24,6 +24,7 @@ Content-Type: application/json
 ### GET info about me
 GET {{baseUrl}}/auth/me
 Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
 
 {
     "email": "jjdoe@gmail.com",

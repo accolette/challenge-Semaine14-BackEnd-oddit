@@ -1,3 +1,4 @@
+import "dotenv/config";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
@@ -8,12 +9,12 @@ export async function registerUser(req, res, next) {
 
   try {
     const user = await AppUser.create(req.body);
-    res.status(201).json(`New user created : ${user.pseudo}`);
+    return res.status(201).json(`New user created : ${user.pseudo}`);
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(409).json({ error: "Pseudo or email already exists" });
+      return res.status(409).json({ error: "Pseudo or email already exists" });
     }
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 }
 
@@ -28,10 +29,19 @@ export async function loginUser(req, res, next) {
       expiresIn: "1h",
     });
 
-    res
-      .status(200)
-      .json(`Welcome ${user.pseudo}, your logged in with token : ${token}!`);
+    return res.status(200).json({ user: user.pseudo, token });
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
+}
+
+export async function getConnectedUser(req, res, next) {
+  const user = await AppUser.findByPk(req.user.user_id);
+  console.log(user);
+  return res.status(200).json({
+    first_name: user.first_name,
+    last_name: user.last_name,
+    pseudo: user.pseudo,
+    email: user.email,
+  });
 }
