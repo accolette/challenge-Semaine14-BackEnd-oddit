@@ -9,3 +9,12 @@ export function checkBody(schema, body, res, next) {
   }
   next();
 }
+
+export function errorHandler(err, req, res, next) {
+  res.status(500).json({
+    error: true,
+    message: err.message,
+    details: err.stack,
+  });
+  next();
+}
