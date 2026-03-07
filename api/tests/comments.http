@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:{{$dotenv PORT}}
 
 ### Get on comment
-GET {{baseUrl}}/comments/3
+GET {{baseUrl}}/comments/2
 Content-Type: application/json
 
 ### Create comment

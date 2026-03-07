@@ -20,6 +20,11 @@ Comment.belongsTo(Post, {
   foreignKey: "post_id",
 });
 
+Post.hasMany(Comment, {
+  as: "comments",
+  foreignKey: "post_id",
+});
+
 // Many To Many
 Post.belongsToMany(Category, {
   through: "post_category",

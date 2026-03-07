@@ -1,4 +1,4 @@
-import { AppUser, Category, Post } from "../models/index.js";
+import { AppUser, Category, Post, Comment } from "../models/index.js";
 
 const postDetails = {
   attributes: { exclude: ["appUser_id"] },
@@ -15,6 +15,11 @@ const postDetails = {
       through: {
         attributes: [],
       },
+    },
+    {
+      model: Comment,
+      as: "comments",
+      attributes: ["appUser_id", "content"],
     },
   ],
 };
