@@ -6,12 +6,12 @@ import { sequelize } from "../config/sequelize-client.js";
 
 // One to Many
 Post.belongsTo(AppUser, {
-  as: "appUser",
+  as: "author",
   foreignKey: "appUser_id",
 });
 
 Comment.belongsTo(AppUser, {
-  as: "appUser",
+  as: "author",
   foreignKey: "appUser_id",
 });
 

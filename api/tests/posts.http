@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:{{$dotenv PORT}}
+
+### Get all categories
+GET {{baseUrl}}/posts
+Content-Type: application/json
