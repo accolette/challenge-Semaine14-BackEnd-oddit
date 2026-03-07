@@ -4,6 +4,9 @@
 GET {{baseUrl}}/posts
 Content-Type: application/json
 
+### Get on post
+GET {{baseUrl}}/posts/5
+Content-Type: application/json
 
 ### Create post
 POST {{baseUrl}}/posts
@@ -14,5 +17,16 @@ Authorization: Bearer {{$dotenv TOKEN}}
     "title": "Un nouveau sujet très bien",
     "content": "Je médite encore sur le contenu",
     "appUser_id": 3,
+    "category_id": [3, 2]
+}
+
+### Update post
+PATCH {{baseUrl}}/posts/5
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "title": "Un sujet bien",
+    "content": "Je médite encore sur le contenu",
     "category_id": [1, 2]
 }

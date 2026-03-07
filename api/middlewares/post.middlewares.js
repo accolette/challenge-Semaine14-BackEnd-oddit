@@ -1,7 +1,6 @@
 import Joi from "joi";
 
 import { checkBody } from "./commons.middlewares.js";
-import { AppUser } from "../models/AppUser.js";
 
 export function validatePostCreation(req, res, next) {
   const validateSchema = Joi.object({
@@ -11,6 +10,15 @@ export function validatePostCreation(req, res, next) {
     category_id: Joi.array()
       .items(Joi.number().integer().positive())
       .required(),
+  });
+  checkBody(validateSchema, req.body, res, next);
+}
+
+export function validatePostUpdate(req, res, next) {
+  const validateSchema = Joi.object({
+    title: Joi.string().max(255),
+    content: Joi.string(),
+    category_id: Joi.array().items(Joi.number().integer().positive()),
   });
   checkBody(validateSchema, req.body, res, next);
 }
