@@ -33,14 +33,34 @@ export async function getOnePost(req, res, next) {
 }
 
 export async function createPost(req, res, next) {
-  const post = await Post.create(req.body);
+  const { title, content, category_id } = req.body;
+  console.log({
+    title,
+    content,
+    category_id,
+    appUser_id: req.user.user_id,
+  });
+  const post = await Post.create({
+    title,
+    content,
+    category_id,
+    appUser_id: req.user.user_id,
+  });
   await post.addCategories(req.body.category_id);
 
   res.status(201).json(post);
 }
 
 export async function updatePost(req, res, next) {
+  const actualUser = req.user;
   const post = await Post.findByPk(req.params.id);
+  const postAuthor = post.appUser_id;
+
+  if (actualUser.user_id !== postAuthor) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized : Only author can edit post" });
+  }
 
   const postUpdated = await Post.update(req.body, { where: { id: post.id } });
   if (postUpdated === 0 || !postUpdated) {
@@ -50,10 +70,20 @@ export async function updatePost(req, res, next) {
     await post.setCategories(req.body.category_id);
   }
 
-  res.status(201).json(await Post.findByPk(req.params.id, postDetails));
+  res.status(200).json(await Post.findByPk(req.params.id, postDetails));
 }
 
 export async function deletePost(req, res, next) {
+  const actualUser = req.user;
+  const post = await Post.findByPk(req.params.id);
+  const postAuthor = post.appUser_id;
+
+  if (actualUser.user_id !== postAuthor) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized : Only author can delete post" });
+  }
+
   const deletedCount = await Post.destroy({
     where: { id: req.params.id },
   });

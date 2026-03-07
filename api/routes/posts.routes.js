@@ -4,7 +4,7 @@ import { authenticate } from "../middlewares/auth.middlewares.js";
 import {
   validatePostCreation,
   validatePostUpdate,
-} from "../middlewares/post.middlewares.js";
+} from "../middlewares/posts.middlewares.js";
 import {
   getAllPosts,
   createPost,

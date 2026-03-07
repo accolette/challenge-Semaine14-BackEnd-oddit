@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:{{$dotenv PORT}}
+
+### Get on comment
+GET {{baseUrl}}/comments/3
+Content-Type: application/json
+
+### Create comment
+POST {{baseUrl}}/comments
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "content": "Top !!",
+    "post_id": 1
+}
+
+### Update comment
+PATCH {{baseUrl}}/comments/3
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "content": "Aller super"
+}
+
+### Delete comment
+DELETE {{baseUrl}}/comments/3
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
