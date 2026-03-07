@@ -30,3 +30,8 @@ Authorization: Bearer {{$dotenv TOKEN}}
     "content": "Je médite encore sur le contenu",
     "category_id": [1, 2]
 }
+
+### Delete post
+DELETE {{baseUrl}}/posts/5
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}

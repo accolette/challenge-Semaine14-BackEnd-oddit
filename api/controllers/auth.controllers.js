@@ -37,6 +37,9 @@ export async function loginUser(req, res, next) {
 
 export async function getConnectedUser(req, res, next) {
   const user = await AppUser.findByPk(req.user.user_id);
+  if (user === 0 || !user) {
+    return res.status(404).json({ error: "User not found" });
+  }
   return res.status(200).json({
     first_name: user.first_name,
     last_name: user.last_name,
@@ -47,6 +50,9 @@ export async function getConnectedUser(req, res, next) {
 
 export async function updateConnectedUser(req, res, next) {
   const user = await AppUser.findByPk(req.user.user_id);
+  if (user === 0 || !user) {
+    return res.status(404).json({ error: "User not found" });
+  }
   if (req.body.password) {
     req.body.password = await argon2.hash(req.body.password);
   }
