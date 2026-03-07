@@ -1,5 +1,18 @@
 @baseUrl = http://localhost:{{$dotenv PORT}}
 
-### Get all categories
+### Get all posts
 GET {{baseUrl}}/posts
 Content-Type: application/json
+
+
+### Create post
+POST {{baseUrl}}/posts
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "title": "Un nouveau sujet très bien",
+    "content": "Je médite encore sur le contenu",
+    "appUser_id": 3,
+    "category_id": [1, 2]
+}
