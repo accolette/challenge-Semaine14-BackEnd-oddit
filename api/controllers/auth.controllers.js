@@ -37,11 +37,37 @@ export async function loginUser(req, res, next) {
 
 export async function getConnectedUser(req, res, next) {
   const user = await AppUser.findByPk(req.user.user_id);
-  console.log(user);
   return res.status(200).json({
     first_name: user.first_name,
     last_name: user.last_name,
     pseudo: user.pseudo,
     email: user.email,
   });
+}
+
+export async function updateConnectedUser(req, res, next) {
+  const user = await AppUser.findByPk(req.user.user_id);
+  if (req.body.password) {
+    req.body.password = await argon2.hash(req.body.password);
+  }
+  try {
+    await AppUser.update(req.body, {
+      where: {
+        id: user.id,
+      },
+    });
+    const userUpdated = await AppUser.findByPk(req.user.user_id);
+
+    return res.status(200).json({
+      first_name: userUpdated.first_name,
+      last_name: userUpdated.last_name,
+      pseudo: userUpdated.pseudo,
+      email: userUpdated.email,
+    });
+  } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(409).json({ error: "Pseudo or email already exists" });
+    }
+    return res.status(500).json(error);
+  }
 }

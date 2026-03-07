@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "email": "jjdoe@gmail.com",
-    "password":"@Jjdoe123"
+    "password":"@Jjdoe1234"
 }
 
 ### GET info about me
@@ -29,4 +29,16 @@ Authorization: Bearer {{$dotenv TOKEN}}
 {
     "email": "jjdoe@gmail.com",
     "password":"@Jjdoe123"
+}
+
+
+### Updating infos User
+PATCH {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "first_name": "John",
+    "last_name": "Doe",
+    "password":"@Jjdoe1234"
 }

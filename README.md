@@ -214,6 +214,7 @@ npm run db:create
 npm run db:seed
 # Ou
 npm run db:reset
+# Puis
 npm run dev
 ```
 
@@ -414,6 +415,7 @@ npm run db:create
 npm run db:seed
 # Or
 npm run db:reset
+# And
 npm run dev
 ```
 
