@@ -2,6 +2,8 @@ import "dotenv/config";
 import JoiBase from "joi";
 import jwt from "jsonwebtoken";
 import { joiPasswordExtendCore } from "joi-password";
+import rateLimit from "express-rate-limit";
+
 import { checkBody } from "./commons.middlewares.js";
 import { AppUser } from "../models/AppUser.js";
 
@@ -15,6 +17,7 @@ export function validateUserRegistration(req, res, next) {
     email: Joi.string().email().max(128).required(),
     password: Joi.string()
       .min(8)
+      .max(128)
       .minOfSpecialCharacters(1)
       .minOfUppercase(1)
       .minOfLowercase(1)
@@ -33,6 +36,7 @@ export function validateUserUpdate(req, res, next) {
     email: Joi.string().email().max(128),
     password: Joi.string()
       .min(8)
+      .max(128)
       .minOfSpecialCharacters(1)
       .minOfUppercase(1)
       .minOfLowercase(1)
@@ -47,6 +51,7 @@ export function validateUserLogin(req, res, next) {
     email: Joi.string().email().max(128).required(),
     password: Joi.string()
       .min(8)
+      .max(128)
       .minOfSpecialCharacters(1)
       .minOfUppercase(1)
       .minOfLowercase(1)
@@ -58,6 +63,10 @@ export function validateUserLogin(req, res, next) {
 }
 
 export async function authenticate(req, res, next) {
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({ error: "JWT_SECRET missing or invalid" });
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -79,3 +88,10 @@ export async function authenticate(req, res, next) {
     return res.status(401).json({ error: "Invalid or expired token" });
   }
 }
+
+// Rate limiter : to prevent too many login/register attempts
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 5, // 5 tentatives max
+  message: "Too many attempts, try again later",
+});

@@ -1,20 +1,22 @@
 import { AppUser, Category, Post, Comment } from "../models/index.js";
+import { notFound } from "../utils/commons.utils.js";
 
 export async function getOneComment(req, res, next) {
+  if (isNaN(req.params.id)) {
+    writeToLog(`ERROR 400 : Invalid ID : ${req.params.id}`);
+    return res.status(400).json({ error: "Invalid ID" });
+  }
+
   const comment = await Comment.findByPk(req.params.id);
+
   if (comment === 0 || !comment) {
-    return res.status(404).json({ error: "Comment not found" });
+    return next(notFound("Comment not found"));
   }
   res.status(200).json(comment);
 }
 
 export async function createComment(req, res, next) {
   const { content, post_id } = req.body;
-  console.log({
-    content,
-    post_id,
-    appUser_id: req.user.user_id,
-  });
 
   const comment = await Comment.create({
     content,
@@ -26,6 +28,11 @@ export async function createComment(req, res, next) {
 }
 
 export async function updateComment(req, res, next) {
+  if (isNaN(req.params.id)) {
+    writeToLog(`ERROR 400 : Invalid ID : ${req.params.id}`);
+    return res.status(400).json({ error: "Invalid ID" });
+  }
+
   const actualUser = req.user;
   const comment = await Comment.findByPk(req.params.id);
   const commentAuthor = comment.appUser_id;
@@ -40,13 +47,18 @@ export async function updateComment(req, res, next) {
     where: { id: comment.id },
   });
   if (commentUpdated === 0 || !commentUpdated) {
-    return res.status(404).json({ error: "Comment not found" });
+    return next(notFound("Comment not found"));
   }
 
   res.status(200).json(await Comment.findByPk(req.params.id));
 }
 
 export async function deleteComment(req, res, next) {
+  if (isNaN(req.params.id)) {
+    writeToLog(`ERROR 400 : Invalid ID : ${req.params.id}`);
+    return res.status(400).json({ error: "Invalid ID" });
+  }
+
   const actualUser = req.user;
   const comment = await Comment.findByPk(req.params.id);
   const commentAuthor = comment.appUser_id;
@@ -61,7 +73,7 @@ export async function deleteComment(req, res, next) {
     where: { id: req.params.id },
   });
   if (deletedCount === 0 || !deletedCount) {
-    return res.status(404).json({ error: "Comment not found" });
+    return next(notFound("Comment not found"));
   }
-  res.status(214).json(`Commentaire numéro ${req.params.id} supprimé`);
+  res.status(204).json(`Commentaire numéro ${req.params.id} supprimé`);
 }

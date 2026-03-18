@@ -1,4 +1,3 @@
-
 # O-ddit — Multidisciplinary Expert Forum API
 
 ![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
@@ -16,7 +15,7 @@ English below 👇
 
 **O-ddit** est une plateforme de forum permettant à des experts issus de différents domaines (sciences, technologie, arts, médecine, etc.) de partager leurs connaissances et d’échanger autour de sujets interdisciplinaires.
 
-Ce projet de formation consiste à développer l’**API REST** qui sert de fondation à la plateforme.
+Ce projet consiste à développer une **API REST complète, sécurisée et documentée**, servant de fondation à la plateforme.
 
 L’API gère :
 
@@ -28,8 +27,9 @@ L’API gère :
 Le projet met l’accent sur :
 
 * les **bonnes pratiques REST**
-* la structuration **MVC**
+* une architecture **MVC claire**
 * la validation des données
+* la sécurité des échanges
 * la gestion d’une base **PostgreSQL avec Sequelize**
 
 ---
@@ -50,6 +50,8 @@ Validation & sécurité :
 
 * Joi
 * JSON Web Token (JWT)
+* Helmet (sécurisation des headers HTTP)
+* Express Rate Limit (protection contre le brute force)
 
 ---
 
@@ -62,9 +64,45 @@ L’API permet :
 * la création et gestion des **posts**
 * la gestion des **commentaires et réponses**
 
-Le détail des fonctionnalités est défini dans les **User Stories du projet** :
-
 👉 [Lien vers les User Stories](./docs/user-stories.md)
+
+---
+
+## Sécurité & bonnes pratiques
+
+Plusieurs mécanismes ont été mis en place pour renforcer la sécurité de l’API :
+
+* **CORS configuré** (restriction des origines en production)
+* **Helmet** → sécurisation des headers HTTP (XSS, clickjacking, etc.)
+* **Rate Limiter** → protection contre les attaques par brute force (login, endpoints sensibles)
+* **Limitation du body parsing** → prévention des payloads trop volumineux
+* **Middleware global de gestion des erreurs (404 + erreurs serveur)**
+
+---
+
+## Documentation de l’API
+
+Une documentation interactive est disponible via **Swagger** :
+
+👉 `http://localhost:PORT/api/docs/`
+
+Elle permet :
+
+* de visualiser les routes
+* de tester les endpoints directement
+* de comprendre les formats de requêtes/réponses
+
+---
+
+## Logs & suivi en production
+
+Un système de logs a été mis en place pour :
+
+* tracer les erreurs serveur
+* faciliter le debug
+* améliorer le suivi en production
+
+Les logs sont centralisés dans un fichier dédié.
 
 ---
 
@@ -73,15 +111,14 @@ Le détail des fonctionnalités est défini dans les **User Stories du projet** 
 Structure simplifiée :
 
 ```
-
 api
 │
 ├── controllers
 ├── models
 ├── routes
 ├── middlewares
+├── logs
 └── app.js
-
 ```
 
 Architecture basée sur **MVC** :
@@ -89,13 +126,11 @@ Architecture basée sur **MVC** :
 * **Models** → accès aux données
 * **Controllers** → logique métier
 * **Routes** → endpoints API
-* **Middlewares** → sécurité et gestion des erreurs
+* **Middlewares** → sécurité, logs et gestion des erreurs
 
 ---
 
 ## Base de données
-
-Le schéma de la base de données est disponible ici :
 
 👉 [Modèle logique de données](./docs/MLD.png)
 
@@ -118,82 +153,11 @@ Le schéma de la base de données est disponible ici :
 | PATCH  | `/comments/:id`  | Update a comment                     | ✅             |
 | DELETE | `/comments/:id`  | Delete a comment                     | ✅             |
 
-✅ = authentication required
-
----
-
-## Exemples de routes API
-
-Authentification
-
-```
-
-POST /auth/register
-POST /auth/login
-
-```
-
-Posts
-
-```
-
-GET /posts
-POST /posts
-
-```
-
-Commentaires
-
-```
-
-POST /comments
-
-```
-
 ---
 
 ## Tester l’API avec REST Client
 
-Les routes peuvent être testées facilement avec l’extension **REST Client (VS Code)**.
-
-Exemple de fichier `.http` :
-
-```
-
-@baseUrl = [http://localhost:{{$dotenv](http://localhost:{{$dotenv) PORT}}
-
-### Registration for a new User
-
-POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-"first_name": "Jane",
-"last_name": "Doe",
-"pseudo": "Jj",
-"email": "jjdoe@gmail.com",
-"password":"@Jjdoe123"
-}
-
-### Login for a User
-
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-"email": "jjdoe@gmail.com",
-"password":"@Jjdoe123"
-}
-
-### Get info about current user
-
-GET {{baseUrl}}/auth/me
-Content-Type: application/json
-Authorization: Bearer {{$dotenv TOKEN}}
-
-```
-
-Cette méthode permet de **tester rapidement les endpoints sans Postman**.
+Les routes peuvent être testées avec **REST Client (VS Code)**.
 
 ---
 
@@ -205,8 +169,6 @@ Prérequis :
 * PostgreSQL
 * npm
 
-Installation :
-
 ```bash
 npm install
 cp .env.example .env
@@ -214,7 +176,6 @@ npm run db:create
 npm run db:seed
 # Ou
 npm run db:reset
-# Puis
 npm run dev
 ```
 
@@ -224,23 +185,9 @@ npm run dev
 
 ## Overview
 
-**O-ddit** is a forum platform designed for experts from different fields (science, technology, arts, medicine, etc.) to share knowledge and collaborate on interdisciplinary topics.
+**O-ddit** is a **secure and documented REST API** for a multidisciplinary forum platform.
 
-This project focuses on building the **REST API** that powers the platform.
-
-The API manages:
-
-* users
-* categories
-* posts
-* comments
-
-The project focuses on:
-
-* **REST API best practices**
-* **MVC architecture**
-* server-side validation
-* PostgreSQL database management with Sequelize
+It allows experts from various fields to share knowledge and collaborate.
 
 ---
 
@@ -260,164 +207,47 @@ Validation & Security
 
 * Joi
 * JSON Web Token (JWT)
+* Helmet
+* Express Rate Limit
 
 ---
 
-## Main Features
+## Security & Best Practices
 
-The API allows:
+The API includes several security improvements:
 
-* **user management**
-* **category management**
-* **post creation and management**
-* **comment and reply system**
-
-Detailed features are defined in the project's **User Stories**:
-
-👉 [Link to User Stories](./docs/user-stories.md)
+* Configured **CORS** (restricted origins)
+* **Helmet** → secure HTTP headers
+* **Rate Limiting** → brute force protection
+* Request size limiting
+* Global error handling middleware
 
 ---
 
-## Project Architecture
+## API Documentation
 
-Simplified structure :
+Swagger documentation available at:
 
-```
-api
-│
-├── controllers
-├── models
-├── routes
-├── middlewares
-└── app.js
-```
-
-Architecture based on the **MVC pattern** :
-
-* **Models** → database interaction
-* **Controllers** → business logic
-* **Routes** → API endpoints
-* **Middlewares** → security and error handling
+👉 `http://localhost:PORT/api/docs/`
 
 ---
 
-## Database
+## Logging System
 
-The database schema is available here :
+A logging system is implemented to:
 
-👉 [Logical Data Model](./docs/MLD.png)
-
-
----
-
-## API Endpoints
-
-| Method | Route            | Description                          | Auth          |
-| ------ | ---------------- | ------------------------------------ | ------------- |
-| POST   | `/auth/register` | Create a new user                    | ❌             |
-| POST   | `/auth/login`    | Authenticate a user and generate JWT | ❌             |
-| GET    | `/auth/me`       | Get current authenticated user       | ✅             |
-| GET    | `/categories`    | List all categories                  | ❌             |
-| POST   | `/categories`    | Create a category                    | ✅ (admin/mod) |
-| GET    | `/posts`         | List posts (with pagination)         | ❌             |
-| POST   | `/posts`         | Create a post                        | ✅             |
-| PATCH  | `/posts/:id`     | Update a post                        | ✅             |
-| DELETE | `/posts/:id`     | Delete a post                        | ✅             |
-| POST   | `/comments`      | Add a comment                        | ✅             |
-| PATCH  | `/comments/:id`  | Update a comment                     | ✅             |
-| DELETE | `/comments/:id`  | Delete a comment                     | ✅             |
-
-✅ = authentication required
-
----
-
-## API Routes Examples
-
-Authentication
-
-```
-POST /auth/register
-POST /auth/login
-```
-
-Posts
-
-```
-GET /posts
-POST /posts
-```
-
-Comments
-
-```
-POST /comments
-```
-
----
-
-## Testing the API with REST Client
-
-API routes can easily be tested using the **REST Client VS Code extension**.
-
-Example `.http` file:
-
-```
-@baseUrl = [http://localhost:{{$dotenv](http://localhost:{{$dotenv) PORT}}
-
-### Registration for a new User
-
-POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-"first_name": "Jane",
-"last_name": "Doe",
-"pseudo": "Jj",
-"email": "jjdoe@gmail.com",
-"password":"@Jjdoe123"
-}
-
-### Login for a User
-
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-"email": "jjdoe@gmail.com",
-"password":"@Jjdoe123"
-}
-
-### Get info about current user
-
-GET {{baseUrl}}/auth/me
-Content-Type: application/json
-Authorization: Bearer {{$dotenv TOKEN}}
-```
-
-This allows quick testing of endpoints **directly from VS Code**.
+* track server errors
+* improve debugging
+* monitor production behavior
 
 ---
 
 ## Installation
-
-Requirements
-
-* Node.js
-* PostgreSQL
-* npm
-
-Setup :
 
 ```bash
 npm install
 cp .env.example .env
 npm run db:create
 npm run db:seed
-# Or
-npm run db:reset
-# And
 npm run dev
 ```
-
-
-

@@ -1,4 +1,5 @@
 import { AppUser, Category, Post, Comment } from "../models/index.js";
+import { notFound } from "../utils/commons.utils.js";
 
 const postDetails = {
   attributes: { exclude: ["appUser_id"] },
@@ -30,21 +31,20 @@ export async function getAllPosts(req, res, next) {
 }
 
 export async function getOnePost(req, res, next) {
+  if (isNaN(req.params.id)) {
+    writeToLog(`ERROR 400 : Invalid ID : ${req.params.id}`);
+    return res.status(400).json({ error: "Invalid ID" });
+  }
+
   const post = await Post.findByPk(req.params.id, postDetails);
   if (post === 0 || !post) {
-    return res.status(404).json({ error: "Post not found" });
+    return next(notFound("Post not found"));
   }
   res.status(200).json(post);
 }
 
 export async function createPost(req, res, next) {
   const { title, content, category_id } = req.body;
-  console.log({
-    title,
-    content,
-    category_id,
-    appUser_id: req.user.user_id,
-  });
   const post = await Post.create({
     title,
     content,
@@ -69,7 +69,7 @@ export async function updatePost(req, res, next) {
 
   const postUpdated = await Post.update(req.body, { where: { id: post.id } });
   if (postUpdated === 0 || !postUpdated) {
-    return res.status(404).json({ error: "Post not found" });
+    return next(notFound("Post not found"));
   }
   if (req.body.category_id) {
     await post.setCategories(req.body.category_id);
@@ -79,6 +79,11 @@ export async function updatePost(req, res, next) {
 }
 
 export async function deletePost(req, res, next) {
+  if (isNaN(req.params.id)) {
+    writeToLog(`ERROR 400 : Invalid ID : ${req.params.id}`);
+    return res.status(400).json({ error: "Invalid ID" });
+  }
+
   const actualUser = req.user;
   const post = await Post.findByPk(req.params.id);
   const postAuthor = post.appUser_id;
@@ -93,7 +98,7 @@ export async function deletePost(req, res, next) {
     where: { id: req.params.id },
   });
   if (deletedCount === 0 || !deletedCount) {
-    return res.status(404).json({ error: "Post not found" });
+    return next(notFound("Post not found"));
   }
-  res.status(214).json(`Post numéro ${req.params.id} supprimé`);
+  res.status(204).json(`Post numéro ${req.params.id} supprimé`);
 }

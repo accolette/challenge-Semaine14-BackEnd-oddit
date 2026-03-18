@@ -1,5 +1,6 @@
 PORT=****
 PG_URL=postgres://user:password@localhost/databaseName
 JWT_SECRET=[******](https://jwtsecretkeygenerator.com/)
+NODE_ENV=developpment OR production
 # For tests with REST Client
 TOKEN=******

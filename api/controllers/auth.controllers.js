@@ -3,6 +3,7 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 import { AppUser } from "../models/index.js";
+import { notFound } from "../utils/commons.utils.js";
 
 export async function registerUser(req, res, next) {
   req.body.password = await argon2.hash(req.body.password);
@@ -14,7 +15,7 @@ export async function registerUser(req, res, next) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res.status(409).json({ error: "Pseudo or email already exists" });
     }
-    return res.status(500).json(error);
+    next(error);
   }
 }
 
@@ -22,7 +23,7 @@ export async function loginUser(req, res, next) {
   try {
     const user = await AppUser.findOne({ where: { email: req.body.email } });
     if (!user || !(await argon2.verify(user.password, req.body.password))) {
-      res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const token = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, {
@@ -31,14 +32,14 @@ export async function loginUser(req, res, next) {
 
     return res.status(200).json({ user: user.pseudo, token });
   } catch (error) {
-    return res.status(500).json(error);
+    next(error);
   }
 }
 
 export async function getConnectedUser(req, res, next) {
   const user = await AppUser.findByPk(req.user.user_id);
   if (user === 0 || !user) {
-    return res.status(404).json({ error: "User not found" });
+    return next(notFound("User not found"));
   }
   return res.status(200).json({
     first_name: user.first_name,
@@ -51,7 +52,7 @@ export async function getConnectedUser(req, res, next) {
 export async function updateConnectedUser(req, res, next) {
   const user = await AppUser.findByPk(req.user.user_id);
   if (user === 0 || !user) {
-    return res.status(404).json({ error: "User not found" });
+    return next(notFound("User not found"));
   }
   if (req.body.password) {
     req.body.password = await argon2.hash(req.body.password);
@@ -74,6 +75,6 @@ export async function updateConnectedUser(req, res, next) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res.status(409).json({ error: "Pseudo or email already exists" });
     }
-    return res.status(500).json(error);
+    next(error);
   }
 }
