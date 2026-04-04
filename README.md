@@ -19,18 +19,18 @@ Ce projet consiste à développer une **API REST complète, sécurisée et docum
 
 L’API gère :
 
-* les utilisateurs
-* les catégories
-* les posts
-* les commentaires
+- les utilisateurs
+- les catégories
+- les posts
+- les commentaires
 
 Le projet met l’accent sur :
 
-* les **bonnes pratiques REST**
-* une architecture **MVC claire**
-* la validation des données
-* la sécurité des échanges
-* la gestion d’une base **PostgreSQL avec Sequelize**
+- les **bonnes pratiques REST**
+- une architecture **MVC claire**
+- la validation des données
+- la sécurité des échanges
+- la gestion d’une base **PostgreSQL avec Sequelize**
 
 ---
 
@@ -38,20 +38,20 @@ Le projet met l’accent sur :
 
 Backend :
 
-* Node.js
-* Express
+- Node.js
+- Express
 
 Base de données :
 
-* PostgreSQL
-* Sequelize ORM
+- PostgreSQL
+- Sequelize ORM
 
 Validation & sécurité :
 
-* Joi
-* JSON Web Token (JWT)
-* Helmet (sécurisation des headers HTTP)
-* Express Rate Limit (protection contre le brute force)
+- Joi
+- JSON Web Token (JWT)
+- Helmet (sécurisation des headers HTTP)
+- Express Rate Limit (protection contre le brute force)
 
 ---
 
@@ -59,12 +59,20 @@ Validation & sécurité :
 
 L’API permet :
 
-* la gestion des **utilisateurs**
-* la gestion des **catégories**
-* la création et gestion des **posts**
-* la gestion des **commentaires et réponses**
+- la gestion des **utilisateurs**
+- la gestion des **catégories**
+- la création et gestion des **posts**
+- la gestion des **commentaires et réponses**
 
-👉 [Lien vers les User Stories](./docs/user-stories.md)
+---
+
+## Suivi de projet
+
+- [Lien vers les User Stories](./docs/user-stories.md)
+- [Lien vers le Backlog](./docs/backlog.md)
+- [Lien vers le Daily Tracking Day 1](./docs/daily-track-d1.md)
+- [Lien vers le Daily Tracking Day 2](./docs/daily-track-d2.md)
+- [Lien vers le Daily Tracking Day 3](./docs/daily-track-d3.md)
 
 ---
 
@@ -72,11 +80,11 @@ L’API permet :
 
 Plusieurs mécanismes ont été mis en place pour renforcer la sécurité de l’API :
 
-* **CORS configuré** (restriction des origines en production)
-* **Helmet** → sécurisation des headers HTTP (XSS, clickjacking, etc.)
-* **Rate Limiter** → protection contre les attaques par brute force (login, endpoints sensibles)
-* **Limitation du body parsing** → prévention des payloads trop volumineux
-* **Middleware global de gestion des erreurs (404 + erreurs serveur)**
+- **CORS configuré** (restriction des origines en production)
+- **Helmet** → sécurisation des headers HTTP (XSS, clickjacking, etc.)
+- **Rate Limiter** → protection contre les attaques par brute force (login, endpoints sensibles)
+- **Limitation du body parsing** → prévention des payloads trop volumineux
+- **Middleware global de gestion des erreurs (404 + erreurs serveur)**
 
 ---
 
@@ -88,9 +96,9 @@ Une documentation interactive est disponible via **Swagger** :
 
 Elle permet :
 
-* de visualiser les routes
-* de tester les endpoints directement
-* de comprendre les formats de requêtes/réponses
+- de visualiser les routes
+- de tester les endpoints directement
+- de comprendre les formats de requêtes/réponses
 
 ---
 
@@ -98,9 +106,9 @@ Elle permet :
 
 Un système de logs a été mis en place pour :
 
-* tracer les erreurs serveur
-* faciliter le debug
-* améliorer le suivi en production
+- tracer les erreurs serveur
+- faciliter le debug
+- améliorer le suivi en production
 
 Les logs sont centralisés dans un fichier dédié.
 
@@ -123,10 +131,10 @@ api
 
 Architecture basée sur **MVC** :
 
-* **Models** → accès aux données
-* **Controllers** → logique métier
-* **Routes** → endpoints API
-* **Middlewares** → sécurité, logs et gestion des erreurs
+- **Models** → accès aux données
+- **Controllers** → logique métier
+- **Routes** → endpoints API
+- **Middlewares** → sécurité, logs et gestion des erreurs
 
 ---
 
@@ -138,8 +146,8 @@ Architecture basée sur **MVC** :
 
 ## API Endpoints
 
-| Method | Route            | Description                          | Auth          |
-| ------ | ---------------- | ------------------------------------ | ------------- |
+| Method | Route            | Description                          | Auth           |
+| ------ | ---------------- | ------------------------------------ | -------------- |
 | POST   | `/auth/register` | Create a new user                    | ❌             |
 | POST   | `/auth/login`    | Authenticate a user and generate JWT | ❌             |
 | GET    | `/auth/me`       | Get current authenticated user       | ✅             |
@@ -159,15 +167,27 @@ Architecture basée sur **MVC** :
 
 Les routes peuvent être testées avec **REST Client (VS Code)**.
 
+Des fichiers de requêtes sont fournis pour tester facilement les endpoints directement dans VS Code (extension REST Client). Dans le dossier :
+
+```bash
+api/tests
+```
+
+Ils permettent de :
+
+tester les routes d’authentification (/auth/register, /auth/login, /auth/me)
+manipuler les posts (GET, POST, PATCH, DELETE)
+utiliser des variables d’environnement (PORT, TOKEN)
+
 ---
 
 ## Installation
 
 Prérequis :
 
-* Node.js
-* PostgreSQL
-* npm
+- Node.js
+- PostgreSQL
+- npm
 
 ```bash
 npm install
@@ -195,20 +215,20 @@ It allows experts from various fields to share knowledge and collaborate.
 
 Backend
 
-* Node.js
-* Express
+- Node.js
+- Express
 
 Database
 
-* PostgreSQL
-* Sequelize ORM
+- PostgreSQL
+- Sequelize ORM
 
 Validation & Security
 
-* Joi
-* JSON Web Token (JWT)
-* Helmet
-* Express Rate Limit
+- Joi
+- JSON Web Token (JWT)
+- Helmet
+- Express Rate Limit
 
 ---
 
@@ -216,11 +236,11 @@ Validation & Security
 
 The API includes several security improvements:
 
-* Configured **CORS** (restricted origins)
-* **Helmet** → secure HTTP headers
-* **Rate Limiting** → brute force protection
-* Request size limiting
-* Global error handling middleware
+- Configured **CORS** (restricted origins)
+- **Helmet** → secure HTTP headers
+- **Rate Limiting** → brute force protection
+- Request size limiting
+- Global error handling middleware
 
 ---
 
@@ -236,9 +256,9 @@ Swagger documentation available at:
 
 A logging system is implemented to:
 
-* track server errors
-* improve debugging
-* monitor production behavior
+- track server errors
+- improve debugging
+- monitor production behavior
 
 ---
 
