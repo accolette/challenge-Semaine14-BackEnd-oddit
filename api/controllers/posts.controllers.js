@@ -21,6 +21,13 @@ const postDetails = {
       model: Comment,
       as: "comments",
       attributes: ["appUser_id", "content"],
+      include: [
+        {
+          model: AppUser,
+          as: "author",
+          attributes: ["pseudo"],
+        },
+      ],
     },
   ],
 };
