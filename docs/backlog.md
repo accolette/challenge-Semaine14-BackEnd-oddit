@@ -44,7 +44,13 @@ Développer une API REST pour une plateforme de forum multidisciplinaire permett
 ### ⭐ Bonus
 
 - ⏳ US14 — Gestion des rôles
-- ⏳ US15 — Frontend
+- ⏳ US15 — Frontend loggin, register
+- ⏳ US16 — Frontend compte utilisateur
+- ✅ US17 — Frontend acces aux posts
+- ⏳ US18 — Frontend creation et modification de posts
+- ⏳ US19 — Frontend systemes tags des posts
+- ⏳ US20 — Frontend CRUD categories
+- ⏳ US21 — Frontend commentaires
 
 ---
 

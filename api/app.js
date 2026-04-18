@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins =
   process.env.NODE_ENV === "production"
     ? ["https://monfront.com"]
-    : [`http://localhost:${PORT}`];
+    : [`http://localhost:${PORT}`, `http://localhost:5173`];
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
